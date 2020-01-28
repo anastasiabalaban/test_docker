@@ -34,18 +34,19 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t mydockerrepo .
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
 
-#      - rails -v
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $IMAGE_REPO_NAME:$IMAGE_TAG
+
 #      - echo "run rubocop"
 #      - bundle exec rubocop
 
 #      - echo "setup db"
-#      - bundle exec rake db:setup RAILS_ENV=test
-#      - bundle exec rake db:migrate RAILS_ENV=test
+#      - cd docker/development
+#      - docker-compose run web bundle exec rake db:setup RAILS_ENV=test
+#      - docker-compose run web bundle exec rake db:migrate RAILS_ENV=test
   post_build:
     commands:
-#      - echo Build completed on `date`
-#      - echo pushing to repo
-#      - docker push $REPO_URL:$LATEST_VERSION
-#     - ruby scripts/update_task_definition.rb
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $IMAGE_REPO_NAME:$IMAGE_TAG
